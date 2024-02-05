@@ -10,8 +10,8 @@ class Lego
     private string $description;
     private float $price;
     private int $pieces;
-    private string $boximages;
-    private string $bgimages;
+    private string $boxImage;
+    private string $legoImage;
 
 
     public function __construct(int $id, string $name, string $collection)
@@ -145,9 +145,9 @@ class Lego
     /**
      * Get the value of boximages
      */ 
-    public function getBoximages(): string
+    public function getBoxImage(): string
     {
-        return $this->boximages;
+        return $this->boxImage;
     }
 
     /**
@@ -155,9 +155,9 @@ class Lego
      *
      * @return  self
      */ 
-    public function setBoximages($boximages): self
+    public function setBoxImage($boxImage): self
     {
-        $this->boximages = $boximages;
+        $this->boxImage = $boxImage;
 
         return $this;
     }
@@ -165,9 +165,9 @@ class Lego
     /**
      * Get the value of bgimages
      */ 
-    public function getBgimages(): string
+    public function getLegoImage(): string
     {
-        return $this->bgimages;
+        return $this->legoImage;
     }
 
     /**
@@ -175,9 +175,9 @@ class Lego
      *
      * @return  self
      */ 
-    public function setBgimages($bgimages): self
+    public function setLegoImage($legoImage): self
     {
-        $this->bgimages = $bgimages;
+        $this->legoImage = $legoImage;
 
         return $this;
     }
