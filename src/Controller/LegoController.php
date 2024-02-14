@@ -11,8 +11,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use stdClass;
+use App\Service\CreditsGenerator;
+
 
 use App\Entity\Lego;
+use App\Service\DatabaseInterface;
+use Symfony\Flex\Response as FlexResponse;
 
 /* le nom de la classe doit être cohérent avec le nom du fichier */
 class LegoController extends AbstractController
@@ -47,9 +51,17 @@ class LegoController extends AbstractController
     }
 
 
+    // #[Route('/', )]
+    // public function home()
+    // {
+    //     return $this->render('lego.html.twig', ['legos' => $this->legos]);
+    // }
+
+
     #[Route('/', )]
-    public function home()
+    public function home(DatabaseInterface $dbinterface): Response
     {
+        $this->legos = $dbinterface->getAllLegos();
         return $this->render('lego.html.twig', ['legos' => $this->legos]);
     }
 
@@ -84,13 +96,22 @@ class LegoController extends AbstractController
     }
 
 
-    #[Route('/{collection}', 'filter_by_collection', requirements: ['page' => 'creator|starwars|expert'])]
+    #[Route('/{collection}', 'filter_by_collection', requirements: ['collection' => 'creator|star_wars|creator_expert'])]
     public function filter($collection): Response
     {
         return $this->render('lego.html.twig', ['legos' => array_filter($this->legos, function($lego) use ($collection) {
             return strtolower($lego->getCollection()) == str_replace('_',' ', strtolower($collection));
         })]);
     }
+
+
+    #[Route('/credits', 'credits')]
+    public function credits(CreditsGenerator $credits): Response
+    {
+        return new Response($credits->getCredits());
+    }
+
+
 
 }
 
