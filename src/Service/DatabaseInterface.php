@@ -55,12 +55,13 @@ class DatabaseInterface
         return $result;
     }
 
-    public function getCollections(): array
-    {
-        $pdo = new \PDO("mysql:host=tp-symfony-mysql;dbname=lego_store", "root", "root");
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $result = $pdo->query("SELECT collections FROM lego")->fetchAll(PDO::FETCH_ASSOC);
+    // public function getCollections(): array
+    // {
+    //     $pdo = new \PDO("mysql:host=tp-symfony-mysql;dbname=lego_store", "root", "root");
+    //     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    //     $result = $pdo->query("SELECT collections FROM lego")->fetchAll(PDO::FETCH_ASSOC);
 
-        return $result;
-    }
+
+    //     return $result;
+    // }
 }
