@@ -22,35 +22,6 @@ use Symfony\Flex\Response as FlexResponse;
 class LegoController extends AbstractController
 {
 
-    private array $legos;
-
-    public function __construct()
-    {
-
-        $this->legos = [];
-
-        // Chargement du contenu du fichier data.json
-        $data = file_get_contents('../src/data.json');
-        $json = json_decode($data);
-
-
-        // Création des objets Lego à partir des données
-        foreach ($json as $lego) {
-            $legoModel = new Lego($lego->id, $lego->name, $lego->collection);
-            $legoModel->setDescription($lego->description);
-            $legoModel->setPrice($lego->price);
-            $legoModel->setPieces($lego->pieces);
-            $legoModel->setBoxImage($lego->images->box);
-            $legoModel->setLegoImage($lego->images->bg);
-
-            // Ajout de l'objet Lego au tableau $legos
-            array_push($this->legos, $legoModel);
-        }
-
-        return $this->legos;
-    }
-
-
     // #[Route('/', )]
     // public function home()
     // {
@@ -61,8 +32,8 @@ class LegoController extends AbstractController
     #[Route('/', )]
     public function home(DatabaseInterface $dbinterface): Response
     {
-        $this->legos = $dbinterface->getAllLegos();
-        return $this->render('lego.html.twig', ['legos' => $this->legos]);
+        $legos = $dbinterface->getAllLegos();
+        return $this->render('lego.html.twig', ['legos' => $legos]);
     }
 
 
@@ -96,12 +67,20 @@ class LegoController extends AbstractController
     }
 
 
-    #[Route('/{collection}', 'filter_by_collection', requirements: ['collection' => 'creator|star_wars|creator_expert'])]
-    public function filter($collection): Response
+    #[Route('/{collection}', 'filter_by_collection', requirements: ['collection' => 'creator|star_wars|creator_expert|harry_potter'])]
+    public function filter(DatabaseInterface $dbinterface, $collection): Response
     {
-        return $this->render('lego.html.twig', ['legos' => array_filter($this->legos, function($lego) use ($collection) {
-            return strtolower($lego->getCollection()) == str_replace('_',' ', strtolower($collection));
-        })]);
+        $collectionMAJ = str_replace('_',' ', strtolower($collection));
+
+        $legos = $dbinterface->getLegosByCollection($collectionMAJ);
+
+        return $this->render('lego.html.twig', ['legos' => $legos]);
+
+
+
+        // return $this->render('lego.html.twig', ['legos' => array_filter($this->legos, function($lego) use ($collection) {
+        //     return strtolower($lego->getCollection()) == str_replace('_',' ', strtolower($collection));
+        // })]);
     }
 
 
