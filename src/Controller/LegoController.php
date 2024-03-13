@@ -20,6 +20,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Flex\Response as FlexResponse;
 
 use App\Repository\LegoRepository;
+use App\Repository\LegoCollectionRepository;
+use App\Entity\LegoCollection;
 
 /* le nom de la classe doit être cohérent avec le nom du fichier */
 class LegoController extends AbstractController
@@ -37,7 +39,6 @@ class LegoController extends AbstractController
     {
         $l = new Lego(1234);
         $l->setName("un beau Lego");
-        $l->setCollection("Lego espace");
         $l->setDescription("One Lego");
         $l->setPrice("13.50");
         $l->setPieces("350");
@@ -109,6 +110,16 @@ class LegoController extends AbstractController
         //     return strtolower($lego->getCollection()) == str_replace('_',' ', strtolower($collection));
         // })]);
     }
+
+
+
+    #[Route('/test/{id}', 'test')]
+    public function test2(LegoCollection $collection): Response
+    {
+        dd($collection);
+    }
+
+
 
 
     #[Route('/credits', 'credits')]
