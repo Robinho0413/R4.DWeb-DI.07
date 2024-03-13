@@ -2,187 +2,130 @@
 
 namespace App\Entity;
 
+use App\Repository\LegoRepository;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: LegoRepository::class)]
 class Lego
 {
-    private int $id;
-    private string $name;
-    private string $collection;
-    private string $description;
-    private float $price;
-    private int $pieces;
-    private string $imageBox;
-    private string $imageLego;
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
-    public function __construct(int $id, string $name, string $collection)
+    #[ORM\Column(length: 255)]
+    private ?string $collection = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $description = null;
+
+    #[ORM\Column]
+    private ?float $price = null;
+
+    #[ORM\Column]
+    private ?int $pieces = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $imageBox = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $imageLego = null;
+
+    public function __construct(int $id)
     {
         $this->id = $id;
-        $this->name = $name;
-        $this->collection = $collection;
+
     }
 
-
-    /**
-     * Get the value of id
-     */ 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set the value of id
-     *
-     * @return  self
-     */ 
-    public function setId(int $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of name
-     */ 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * Set the value of name
-     *
-     * @return  self
-     */ 
-    public function setName(string $name): self
+    public function setName(string $name): static
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * Get the value of collection
-     */ 
-    public function getCollection(): string
+    public function getCollection(): ?string
     {
         return $this->collection;
     }
 
-    /**
-     * Set the value of collection
-     *
-     * @return  self
-     */ 
-    public function setCollection(string $collection): self
+    public function setCollection(string $collection): static
     {
         $this->collection = $collection;
 
         return $this;
     }
 
-    /**
-     * Get the value of description
-     */ 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * Set the value of description
-     *
-     * @return  self
-     */ 
-    public function setDescription($description): self
+    public function setDescription(string $description): static
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * Get the value of price
-     */ 
-    public function getPrice(): float
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
-    /**
-     * Set the value of price
-     *
-     * @return  self
-     */ 
-    public function setPrice($price): self
+    public function setPrice(float $price): static
     {
         $this->price = $price;
 
         return $this;
     }
 
-    /**
-     * Get the value of pieces
-     */ 
-    public function getPieces(): int
+    public function getPieces(): ?int
     {
         return $this->pieces;
     }
 
-    /**
-     * Set the value of pieces
-     *
-     * @return  self
-     */ 
-    public function setPieces($pieces): self
+    public function setPieces(int $pieces): static
     {
         $this->pieces = $pieces;
 
         return $this;
     }
 
-    /**
-     * Get the value of boximages
-     */ 
-    public function getImageBox(): string
+    public function getImageBox(): ?string
     {
         return $this->imageBox;
     }
 
-    /**
-     * Set the value of boximages
-     *
-     * @return  self
-     */ 
-    public function setImageBox($imageBox): self
+    public function setImageBox(string $imageBox): static
     {
         $this->imageBox = $imageBox;
 
         return $this;
     }
 
-    /**
-     * Get the value of bgimages
-     */ 
-    public function getImageLego(): string
+    public function getImageLego(): ?string
     {
         return $this->imageLego;
     }
 
-    /**
-     * Set the value of bgimages
-     *
-     * @return  self
-     */ 
-    public function setImageLego($imageLego): self
+    public function setImageLego(string $imageLego): static
     {
         $this->imageLego = $imageLego;
 
         return $this;
     }
 }
-
-
-
-?>

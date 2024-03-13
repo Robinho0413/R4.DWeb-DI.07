@@ -16,7 +16,10 @@ use App\Service\CreditsGenerator;
 
 use App\Entity\Lego;
 use App\Service\DatabaseInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Flex\Response as FlexResponse;
+
+use App\Repository\LegoRepository;
 
 /* le nom de la classe doit être cohérent avec le nom du fichier */
 class LegoController extends AbstractController
@@ -28,17 +31,41 @@ class LegoController extends AbstractController
     //     return $this->render('lego.html.twig', ['legos' => $this->legos]);
     // }
 
-
-    #[Route('/', )]
-    public function home(DatabaseInterface $dbinterface): Response
+    
+    #[Route('/test', 'test')]
+    public function test(EntityManagerInterface $entityManager): Response
     {
-        $legos = $dbinterface->getAllLegos();
-        return $this->render('lego.html.twig', ['legos' => $legos]);
+        $l = new Lego(1234);
+        $l->setName("un beau Lego");
+        $l->setCollection("Lego espace");
+        $l->setDescription("One Lego");
+        $l->setPrice("13.50");
+        $l->setPieces("350");
+        $l->setImageBox("LEGO_31064_Box.png");
+        $l->setImageLego("LEGO_31064_Main.jpg");
+
+        $entityManager->persist($l);
+        $entityManager->flush();
+        return new Response('Saved new product with id '.$l->getId());
+
+        dd($l);
     }
 
 
 
-   // L’attribute #[Route] indique ici que l'on associe la route
+
+    private array $legos;
+
+    #[Route('/', )]
+    public function home(LegoRepository $legoRepository): Response
+    {
+        $this->legos = $legoRepository->findAll();
+        return $this->render('lego.html.twig', ['legos' => $this->legos]);
+    }
+
+
+
+   // L'attribute #[Route] indique ici que l'on associe la route
    // "/" à la méthode home pour que Symfony l'exécute chaque fois
    // que l'on accède à la racine de notre site.
 
@@ -68,13 +95,13 @@ class LegoController extends AbstractController
 
 
     #[Route('/{collection}', 'filter_by_collection', requirements: ['collection' => 'creator|star_wars|creator_expert|harry_potter'])]
-    public function filter(DatabaseInterface $dbinterface, $collection): Response
+    public function filter(LegoRepository $legoRepository, $collection): Response
     {
         $collectionMAJ = str_replace('_',' ', strtolower($collection));
 
-        $legos = $dbinterface->getLegosByCollection($collectionMAJ);
+        // $legos = $dbinterface->getLegosByCollection($collectionMAJ);
 
-        return $this->render('lego.html.twig', ['legos' => $legos]);
+        return $this->render('lego.html.twig', ['legos' => $legoRepository->findByCollection($collectionMAJ)]);
 
 
 
