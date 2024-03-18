@@ -58,10 +58,10 @@ class LegoController extends AbstractController
     private array $legos;
 
     #[Route('/', )]
-    public function home(LegoRepository $legoRepository): Response
+    public function home(LegoRepository $legoRepository, LegoCollectionRepository $legoCollectionRepository): Response
     {
-        $this->legos = $legoRepository->findAll();
-        return $this->render('lego.html.twig', ['legos' => $this->legos]);
+
+        return $this->render('lego.html.twig', ['legos' => $legoRepository->findAll(), 'collections' => $legoCollectionRepository->findAll()] );
     }
 
 
@@ -95,14 +95,14 @@ class LegoController extends AbstractController
     }
 
 
-    #[Route('/{collection}', 'filter_by_collection', requirements: ['collection' => 'creator|star_wars|creator_expert|harry_potter'])]
-    public function filter(LegoRepository $legoRepository, $collection): Response
+    #[Route('/{id}', 'filter_by_collection')]
+    public function filter(LegoCollection $collection, LegoCollectionRepository $legoCollectionRepository): Response
     {
-        $collectionMAJ = str_replace('_',' ', strtolower($collection));
+        // $collectionMAJ = str_replace('_',' ', strtolower($collection));
 
         // $legos = $dbinterface->getLegosByCollection($collectionMAJ);
 
-        return $this->render('lego.html.twig', ['legos' => $legoRepository->findByCollection($collectionMAJ)]);
+        return $this->render('lego.html.twig', ['legos' => $collection->getLegos(), 'collections' => $legoCollectionRepository->findAll()]);
 
 
 
@@ -113,7 +113,7 @@ class LegoController extends AbstractController
 
 
 
-    #[Route('/test/{id}', 'test')]
+    #[Route('/test/{name}', 'test')]
     public function test2(LegoCollection $collection): Response
     {
         dd($collection);
